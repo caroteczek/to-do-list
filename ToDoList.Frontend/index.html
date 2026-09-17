@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Tasks API Tester</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <h1>Tasks API Tester</h1>
+
+    <h2>Dodaj zadanie</h2>
+
+    <input id="newTitle" placeholder="Nazwa zadania" />
+    <button onclick="addTask()">Dodaj</button>
+
+    <h2>Lista zadań</h2>
+
+    <button onclick="loadTasks()">Pobierz zadania</button>
+
+    <div id="tasks"></div>
+
+    <h2>Log API</h2>
+
+    <div id="apiLog"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
