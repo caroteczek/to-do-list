@@ -1,4 +1,4 @@
-const apiUrl = "https://localhost:7071/api/tasks";
+const apiUrl = "https://localhost:7232/ToDoList";
 
 // GET /api/tasks
 async function loadTasks() {
