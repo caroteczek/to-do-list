@@ -1,3 +1,6 @@
 <Solution>
   <Project Path="ToDoList.Api/ToDoList.Api.csproj" />
+  <Project Path="ToDoList.Application/ToDoList.Application.csproj" Id="2c71410c-b8c0-4fc0-8c68-67f16b4c33e9" />
+  <Project Path="ToDoList.Domain/ToDoList.Domain.csproj" Id="ce1ab0aa-1e84-4404-a32f-feb66b7d5381" />
+  <Project Path="ToDoList.Infrastructure/ToDoList.Infrastructure.csproj" Id="b44a11e9-85c6-461f-a584-88665bb4d8c1" />
 </Solution>
