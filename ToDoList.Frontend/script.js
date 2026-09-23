@@ -22,6 +22,47 @@ async function loadTasks() {
   }
 }
 
+// GET /ToDoList/{id} — szczegóły są pobierane z API, nie z listy.
+async function showDetails(id) {
+  document.getElementById("listView").hidden = true;
+  document.getElementById("detailsView").hidden = false;
+  document.getElementById("taskDetails").hidden = true;
+  const status = document.getElementById("detailsStatus");
+  status.textContent = "Ładowanie…";
+  const url = `${apiUrl}/${id}`;
+
+  try {
+    logRequest("GET", url);
+    const response = await fetch(url);
+    const task = await readResponse(response);
+    logResponse(response, task);
+
+    if (response.status === 404) {
+      status.textContent = "Nie znaleziono zadania.";
+      return;
+    }
+
+    if (!response.ok) {
+      status.textContent = `Nie udało się pobrać zadania (HTTP ${response.status}).`;
+      return;
+    }
+
+    document.getElementById("detailsId").textContent = task.id;
+    document.getElementById("detailsName").textContent = task.nazwa;
+    document.getElementById("taskDetails").hidden = false;
+    status.textContent = "";
+  } catch (error) {
+    status.textContent = "Nie udało się połączyć z API.";
+    logError(error);
+  }
+}
+
+function showList() {
+  document.getElementById("detailsView").hidden = true;
+  document.getElementById("listView").hidden = false;
+  loadTasks();
+}
+
 // POST /api/tasks
 async function addTask() {
   const nazwa = document.getElementById("newTitle").value;
@@ -143,6 +184,10 @@ function showTasks(tasks) {
                 Zapisz
             </button>
 
+            <button onclick="showDetails(${task.id})">
+                Szczegóły
+            </button>
+
             <button onclick="deleteTask(${task.id})">
                 Usuń
             </button>
@@ -232,6 +277,3 @@ function logError(error) {
         </div>
     ` + log.innerHTML;
 }
-
-// Pobranie danych po uruchomieniu strony
-loadTasks();
