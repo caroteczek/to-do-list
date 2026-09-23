@@ -32,7 +32,7 @@ namespace ToDoList.Api.Controllers
            
 
 
-                task = new ToDoTaskDto(newId, task.Nazwa);
+                task.Id = newId;
 
 
 

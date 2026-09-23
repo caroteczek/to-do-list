@@ -4,7 +4,7 @@ namespace ToDoList.Api.DTOs
 {
     public class ToDoTaskDto
     {
-        static int _lastId = 0;
+     
         public  int Id { get; set; }
         public string Nazwa { get; set; }
 
