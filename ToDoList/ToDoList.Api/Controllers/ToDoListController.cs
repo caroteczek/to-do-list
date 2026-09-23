@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using ToDoList.Api.DTOs;
 
@@ -7,35 +8,76 @@ namespace ToDoList.Api.Controllers
     [Route("[controller]")]
     public class ToDoListController : ControllerBase
     {
+        private static int globalId = 0;
+
+        private static List<ToDoTaskDto> TasksList = new List<ToDoTaskDto>();
         
 
         [HttpGet]
    
-        public IEnumerable<ToDoTaskDto> Get()
+        public List<ToDoTaskDto> Get()
         {
-            List<ToDoTaskDto> lista = new List<ToDoTaskDto>();
-            return lista;
+
+            return TasksList;
         }
 
-        [HttpPost]
+        
 
-        public ToDoTaskDto Post (ToDoTaskDto task)
+        [HttpPost]
+       
+        public ToDoTaskDto Post (ToDoTaskDto  task)
         {
-            throw new Exception();
+
+            int newId = globalId++;
+           
+
+
+                task.Id = newId;
+
+
+
+            TasksList.Add(task);
+            
+             
+        
+         
+          
+
+            // ToDoTaskDto tasks = (ToDoTaskDto)task[0];
+
+
+
+            return task;
+
+
         }
 
         [HttpPut("{id}")]
 
         public ToDoTaskDto Put(int id, ToDoTaskDto task)
         {
-            throw new Exception();
+
+            var t = TasksList.FirstOrDefault(t => t.Id == id);
+            // task  = new ToDoTaskDto(id, task.Nazwa);
+            t.Nazwa = task.Nazwa;
+
+
+
+
+
+            return t;
         }
 
         [HttpDelete("{id}")]
 
         public bool Delete (int id)
         {
-            throw new Exception();
+
+            var t = TasksList.RemoveAll(t => t.Id == id);
+            // task  = new ToDoTaskDto(id, task.Nazwa);
+            
+             return true;
+
         }
     }
 }
