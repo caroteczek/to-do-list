@@ -10,16 +10,30 @@
   <body>
     <h1>Tasks API Tester</h1>
 
-    <h2>Dodaj zadanie</h2>
+    <section id="listView">
+      <h2>Dodaj zadanie</h2>
 
-    <input id="newTitle" placeholder="Nazwa zadania" />
-    <button onclick="addTask()">Dodaj</button>
+      <input id="newTitle" placeholder="Nazwa zadania" />
+      <button onclick="addTask()">Dodaj</button>
 
-    <h2>Lista zadań</h2>
+      <h2>Lista zadań</h2>
 
-    <button onclick="loadTasks()">Pobierz zadania</button>
+      <button onclick="loadTasks()">Pobierz zadania</button>
 
-    <div id="tasks"></div>
+      <div id="tasks"></div>
+    </section>
+
+    <section id="detailsView" hidden>
+      <h2>Szczegóły zadania</h2>
+      <button onclick="showList()">Wróć do listy</button>
+      <p id="detailsStatus" role="status"></p>
+      <dl id="taskDetails" hidden>
+        <dt>ID</dt>
+        <dd id="detailsId"></dd>
+        <dt>Nazwa</dt>
+        <dd id="detailsName"></dd>
+      </dl>
+    </section>
 
     <h2>Log API</h2>
 
