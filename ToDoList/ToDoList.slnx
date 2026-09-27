@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="ToDoList.Aoi.Tests/ToDoList.Api.Tests.csproj" Id="14608574-2ba3-42b3-83d2-2afd2a5e6a0a" />
   <Project Path="ToDoList.Api/ToDoList.Api.csproj" />
   <Project Path="ToDoList.Application/ToDoList.Application.csproj" Id="2c71410c-b8c0-4fc0-8c68-67f16b4c33e9" />
   <Project Path="ToDoList.Domain/ToDoList.Domain.csproj" Id="ce1ab0aa-1e84-4404-a32f-feb66b7d5381" />
