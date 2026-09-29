@@ -66,6 +66,8 @@ function showList() {
 // POST /api/tasks
 async function addTask() {
   const nazwa = document.getElementById("newTitle").value;
+  
+
 
   const task = {
     nazwa: nazwa,
@@ -98,6 +100,8 @@ async function addTask() {
   } catch (error) {
     logError(error);
   }
+  
+  
 }
 
 // PUT /api/tasks/{id}
@@ -277,3 +281,10 @@ function logError(error) {
         </div>
     ` + log.innerHTML;
 }
+
+document.getElementById("newTitle").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // Zapobiega domyślnym akcjom przeglądarki
+    addTask(); // Wywołuje Twoją funkcję dodającą zadanie
+  }
+});

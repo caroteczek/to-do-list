@@ -11,12 +11,16 @@ namespace ToDoList.Api.Controllers
         private static int globalId = 0;
 
         private static List<ToDoTaskDto> TasksList = new List<ToDoTaskDto>();
+
         
+ 
+
 
         [HttpGet]
    
         public List<ToDoTaskDto> Get()
         {
+
 
             return TasksList;
         }
@@ -25,30 +29,25 @@ namespace ToDoList.Api.Controllers
 
         [HttpPost]
        
-        public ToDoTaskDto Post (ToDoTaskDto  task)
+        public IActionResult Post (ToDoTaskDto  task)
         {
 
-            int newId = globalId++;
-           
+            int newId = ++globalId;
 
 
                 task.Id = newId;
 
-
-
             TasksList.Add(task);
-            
-             
-        
-         
-          
 
             // ToDoTaskDto tasks = (ToDoTaskDto)task[0];
 
+          
 
+                return Created("Task Created", task);
+           
 
-            return task;
-
+        
+        
 
         }
 
@@ -79,5 +78,29 @@ namespace ToDoList.Api.Controllers
              return true;
 
         }
+
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+          
+
+          
+            ToDoTaskDto? task = TasksList.FirstOrDefault(t => t.Id == id);
+
+            if (task is null)
+            {
+                return NotFound($"Task not found. Searching Id: {id}");
+            }
+            
+            else
+            {
+
+                return Ok(task);
+            }
+        }
+
+
+
     }
 }
