@@ -1,133 +1,153 @@
-using System.Runtime.CompilerServices;
+ï»¿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ToDoList.Api.DTOs;
+using ToDoList.Domain;
+using ToDoList.Infrastructure;
+using ToDoList.Infrastructure.Repository;
 
 namespace ToDoList.Api.Controllers
 {
+    [Route("ToDoList")]
     [ApiController]
-    [Route("api/old-todolist")]
     public class ToDoListController : ControllerBase
     {
-        private static int globalId = 0;
+ 
 
-        private static List<ToDoTaskDto> TasksList = new List<ToDoTaskDto>();
 
-        
-        public ToDoListController(List<ToDoTaskDto> l)
+
+        private readonly IToDoListRepository _toDoListRepository;
+
+        public ToDoListController(IToDoListRepository toDoListRepository)
         {
-           
-            TasksList = l;
+            _toDoListRepository = toDoListRepository;
         }
 
-        public ToDoListController(ToDoTaskDto t)
-        {
-            if (TasksList == null)
-            {
-                TasksList = new List<ToDoTaskDto>();
-            }
-
-            if (t != null)
-            {
-                TasksList.Add(t);
-            }
-
-        }
 
         [HttpGet]
-   
+
         public List<ToDoTaskDto> Get()
         {
+            List<ToDoTask> domainTasks = _toDoListRepository.Get();
+
+            List<ToDoTaskDto> taskDtos = domainTasks.Select(task => new ToDoTaskDto
+            {
+                Id = task.Id,
+                Nazwa = task.Title
+            }).ToList();
 
 
-            return TasksList;
+            return taskDtos;
         }
 
-        
+
 
         [HttpPost]
-       
-        public IActionResult Post (ToDoTaskDto  task)
+
+        public IActionResult Post([FromBody] ToDoTaskDto taskDto)
         {
 
-            int newId = globalId++;
+            ToDoTask domainTask = new ToDoTask(taskDto.Id, taskDto.Nazwa);
+            
+
+            _toDoListRepository.Post(domainTask);
+
+            return Created("task created", taskDto);
+
+            //int newId = ++globalId;
 
 
-                task.Id = newId;
+            //    task.Id = newId;
 
-            TasksList.Add(task);
+            //TasksList.Add(task);
 
-            // ToDoTaskDto tasks = (ToDoTaskDto)task[0];
+            //// ToDoTaskDto tasks = (ToDoTaskDto)task[0];
 
-            if (task is not null)
-            {
 
-                return Created("Task Created", task);
-            }
 
-            else
-            {
-                //var nowa_nazwa = task.Nazwa;
-                return null;
-            }
+            //    return Created("Task Created", task);
+
+
+
+
 
         }
 
         [HttpPut("{id}")]
 
-        public ToDoTaskDto Put(int id, ToDoTaskDto task)
+        public IActionResult Put(int id, [FromBody] ToDoTaskDto task)
         {
 
-            var t = TasksList.FirstOrDefault(t => t.Id == id);
-            // task  = new ToDoTaskDto(id, task.Nazwa);
-            t.Nazwa = task.Nazwa;
+            ToDoTask domainTask = new ToDoTask(id, task.Nazwa);
+            
+
+            ToDoTask updatedDomaininTask = _toDoListRepository.Put(id, domainTask);
+
+            if (updatedDomaininTask == null)
+            {
+                return NotFound();
+            }
+
+            ToDoTaskDto responseDto = new ToDoTaskDto
+            {
+                Id = updatedDomaininTask.Id,
+                Nazwa = updatedDomaininTask.Title
+            };
+
+            return Ok(responseDto);
+
+            //var t = TasksList.FirstOrDefault(t => t.Id == id);
+            //// task  = new ToDoTaskDto(id, task.Nazwa);
+            //t.Nazwa = task.Nazwa;
 
 
 
 
 
-            return t;
+            //return t;
         }
 
         [HttpDelete("{id}")]
 
-        public bool Delete (int id)
+        public IActionResult Delete(int id)
         {
 
-            var t = TasksList.RemoveAll(t => t.Id == id);
-            // task  = new ToDoTaskDto(id, task.Nazwa);
-            
-             return true;
 
+            bool isDeleted = _toDoListRepository.Delete(id);
+
+            if (!isDeleted)
+
+            {
+                return NotFound();
+            }
+            //var t = TasksList.RemoveAll(t => t.Id == id);
+            //// task  = new ToDoTaskDto(id, task.Nazwa);
+
+            //return true;
+            return NoContent();
         }
 
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            List<ToDoTaskDto> lista_tasków = Get();
 
-          
-         
 
-         
-            if (TasksList == null)
-            {
-                return NotFound();
-            }
-
-            var task = TasksList.FirstOrDefault(x => x.Id == id);
-
-            if (task == null)
+            ToDoTask domainTask = _toDoListRepository.GetById(id);
+            
+            if (domainTask is null)
             {
                 return NotFound($"Task not found. Searching Id: {id}");
             }
 
-           
-            return Ok(task);
-        }
+            ToDoTaskDto taskDto = new ToDoTaskDto
+            {
+                Id = domainTask.Id,
+                Nazwa = domainTask.Title
+            };
+
+            return Ok(taskDto);
+
     }
 
-
-
-    }
-
+}
+}
