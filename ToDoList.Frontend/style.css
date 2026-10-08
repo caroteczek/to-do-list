@@ -1,19 +1,41 @@
 body {
   font-family: Arial, sans-serif;
+color: darkblue;
+    
   max-width: 800px;
   margin: 40px auto;
+  background-color: #E0E0E0; 
+}
+input, button {
+  padding: 10px 14px;
+  margin: 6px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px; 
+  font-size: 14px;
 }
 
-input,
 button {
-  padding: 8px;
-  margin: 4px;
+  background-color: #007bff;  
+  color: white;            
+  cursor: pointer;         
+  border: none;
+  font-weight: bold;
+}
+button.btn-pobierz {
+  background-color: darkblue; 
+  color: white;             
+  font-weight: bold;
+}
+button:hover {
+  background-color: #0056b3; 
 }
 
 .task {
   border: 1px solid #ccc;
   padding: 10px;
   margin: 10px 0;
+    color: darkblue;
+    border-color: #E0E0E0;
 }
 
 #apiLog {
@@ -24,15 +46,16 @@ button {
   border: 1px solid #ccc;
   padding: 12px;
   margin-bottom: 10px;
+    background: #A0C4FF; 
 }
 
 .request {
-  background: #eeeeee;
+  background: #A0C4FF;
 }
 
 .success {
-  background: #e3f7e3;
-  border-color: #5ba65b;
+  background: #A8E6CF;
+  border-color: #A8E6CF;
 }
 
 .error {

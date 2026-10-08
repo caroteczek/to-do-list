@@ -5,7 +5,7 @@ using ToDoList.Api.DTOs;
 namespace ToDoList.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/old-todolist")]
     public class ToDoListController : ControllerBase
     {
         private static int globalId = 0;
@@ -13,8 +13,25 @@ namespace ToDoList.Api.Controllers
         private static List<ToDoTaskDto> TasksList = new List<ToDoTaskDto>();
 
         
- 
+        public ToDoListController(List<ToDoTaskDto> l)
+        {
+           
+            TasksList = l;
+        }
 
+        public ToDoListController(ToDoTaskDto t)
+        {
+            if (TasksList == null)
+            {
+                TasksList = new List<ToDoTaskDto>();
+            }
+
+            if (t != null)
+            {
+                TasksList.Add(t);
+            }
+
+        }
 
         [HttpGet]
    
@@ -32,7 +49,7 @@ namespace ToDoList.Api.Controllers
         public IActionResult Post (ToDoTaskDto  task)
         {
 
-            int newId = ++globalId;
+            int newId = globalId++;
 
 
                 task.Id = newId;
@@ -41,13 +58,17 @@ namespace ToDoList.Api.Controllers
 
             // ToDoTaskDto tasks = (ToDoTaskDto)task[0];
 
-          
+            if (task is not null)
+            {
 
                 return Created("Task Created", task);
-           
+            }
 
-        
-        
+            else
+            {
+                //var nowa_nazwa = task.Nazwa;
+                return null;
+            }
 
         }
 
@@ -83,24 +104,30 @@ namespace ToDoList.Api.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-          
+            List<ToDoTaskDto> lista_tasków = Get();
 
           
-            ToDoTaskDto? task = TasksList.FirstOrDefault(t => t.Id == id);
+         
 
-            if (task is null)
+         
+            if (TasksList == null)
+            {
+                return NotFound();
+            }
+
+            var task = TasksList.FirstOrDefault(x => x.Id == id);
+
+            if (task == null)
             {
                 return NotFound($"Task not found. Searching Id: {id}");
             }
-            
-            else
-            {
 
-                return Ok(task);
-            }
+           
+            return Ok(task);
         }
+    }
 
 
 
     }
-}
+
