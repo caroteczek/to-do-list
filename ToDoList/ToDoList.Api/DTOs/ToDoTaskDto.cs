@@ -1,5 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using ToDoList.Api.Controllers;
+using ToDoList.Infrastructure.Repository;
+
 namespace ToDoList.Api.DTOs
 {
     public class ToDoTaskDto
@@ -9,14 +11,7 @@ namespace ToDoList.Api.DTOs
         public string Nazwa { get; set; }
 
 
-        public ToDoTaskDto(int id, string nazwa)
-       {
-            Id = id;
-      
-         Nazwa = nazwa;
-
-
-       }
+ 
 
      
     }
