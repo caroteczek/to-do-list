@@ -29,7 +29,7 @@ namespace ToDoListWebApiTests.Controllers
             ];
 
 
-            ToDoListController sut = new ToDoListController(list_of_tasks2);
+            ToDoListController sut = new ToDoListController();
 
             // Act
             List<ToDoTaskDto> result = sut.Get().ToList();
@@ -56,9 +56,9 @@ new ToDoTaskDto { Id = 2, Nazwa = "Kupic bilet" },
 
             //Act
 
-            ToDoListController sut = new ToDoListController(list_of_tasks_to_add);
+           ToDoListController sut = new ToDoListController();
 
-            IActionResult result = sut.Post(list_of_tasks_to_add[0]);
+            IActionResult result = sut.Create(list_of_tasks_to_add[0]);
 
             // Assert
             Assert.NotNull(result);
@@ -74,7 +74,7 @@ new ToDoTaskDto { Id = 2, Nazwa = "Kupic bilet" },
         new ToDoTaskDto { Id = 1, Nazwa = "Uczyć się programowania" }
     };
 
-            ToDoListController sut = new ToDoListController(tasks);
+            ToDoListController sut = new ToDoListController();
 
             int id = 5; 
 

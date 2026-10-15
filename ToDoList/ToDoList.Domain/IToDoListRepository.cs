@@ -33,10 +33,10 @@ namespace ToDoList.Domain
 
 
 
-        public void Post(ToDoTask task);
+        public void Create(ToDoTask task);
 
 
-        public ToDoTask Put(int id, ToDoTask task);
+        public ToDoTask Update(ToDoTask task);
 
 
         public bool Delete(int id);

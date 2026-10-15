@@ -52,8 +52,7 @@ namespace ToDoList.Infrastructure.Repository
 
         public List<ToDoTask> Get()
         {
-           // Ensure();
-            // Tutaj kod zapytania SQLite zwracający List<ToDoTask>
+        
             using SqliteConnection connection = new SqliteConnection(connectionString);
             connection.Open();
 
@@ -86,10 +85,10 @@ namespace ToDoList.Infrastructure.Repository
 
 
 
-        public void Post(ToDoTask task)
+        public void Create(ToDoTask task)
         {
             Ensure();
-            // Tutaj kod zapytania SQLite zwracający List<ToDoTask>
+         
             using var connection = new SqliteConnection(connectionString);
             connection.Open();
 
@@ -104,7 +103,7 @@ namespace ToDoList.Infrastructure.Repository
         }
 
 
-        public ToDoTask Put(int id, ToDoTask task)
+        public ToDoTask Update(ToDoTask task)
         {
             using SqliteConnection connection = new SqliteConnection(connectionString);
             connection.Open();

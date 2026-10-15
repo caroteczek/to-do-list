@@ -46,7 +46,7 @@ namespace ToDoList.Api.Controllers
 
         [HttpPost]
        
-        public IActionResult Post (ToDoTaskDto  task)
+        public IActionResult Create (ToDoTaskDto  task)
         {
 
             int newId = globalId++;

@@ -7,7 +7,7 @@ using ToDoList.Infrastructure.Repository;
 
 namespace ToDoList.Api.Controllers
 {
-    [Route("ToDoList")]
+    [Route("api/[controller]")]
     [ApiController]
     public class ToDoListController : ControllerBase
     {
@@ -43,28 +43,16 @@ namespace ToDoList.Api.Controllers
 
         [HttpPost]
 
-        public IActionResult Post([FromBody] ToDoTaskDto taskDto)
+        public IActionResult Create([FromBody] ToDoTaskDto taskDto)
         {
 
             ToDoTask domainTask = new ToDoTask(taskDto.Id, taskDto.Nazwa);
             
 
-            _toDoListRepository.Post(domainTask);
+            _toDoListRepository.Create(domainTask);
 
-            return Created("task created", taskDto);
+            return Created("Created", taskDto);
 
-            //int newId = ++globalId;
-
-
-            //    task.Id = newId;
-
-            //TasksList.Add(task);
-
-            //// ToDoTaskDto tasks = (ToDoTaskDto)task[0];
-
-
-
-            //    return Created("Task Created", task);
 
 
 
@@ -74,13 +62,13 @@ namespace ToDoList.Api.Controllers
 
         [HttpPut("{id}")]
 
-        public IActionResult Put(int id, [FromBody] ToDoTaskDto task)
+        public IActionResult Update(int id, [FromBody] ToDoTaskDto task)
         {
 
             ToDoTask domainTask = new ToDoTask(id, task.Nazwa);
             
 
-            ToDoTask updatedDomaininTask = _toDoListRepository.Put(id, domainTask);
+            ToDoTask updatedDomaininTask = _toDoListRepository.Update(domainTask);
 
             if (updatedDomaininTask == null)
             {
@@ -95,15 +83,7 @@ namespace ToDoList.Api.Controllers
 
             return Ok(responseDto);
 
-            //var t = TasksList.FirstOrDefault(t => t.Id == id);
-            //// task  = new ToDoTaskDto(id, task.Nazwa);
-            //t.Nazwa = task.Nazwa;
-
-
-
-
-
-            //return t;
+           
         }
 
         [HttpDelete("{id}")]
@@ -119,10 +99,7 @@ namespace ToDoList.Api.Controllers
             {
                 return NotFound();
             }
-            //var t = TasksList.RemoveAll(t => t.Id == id);
-            //// task  = new ToDoTaskDto(id, task.Nazwa);
-
-            //return true;
+            
             return NoContent();
         }
 

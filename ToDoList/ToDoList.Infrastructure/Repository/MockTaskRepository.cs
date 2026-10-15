@@ -7,7 +7,7 @@ namespace ToDoList.Infrastructure.Repository
 {
     internal class MockTaskRepository: IToDoListRepository
     {
-        public void Post(ToDoTask task)
+        public void Create(ToDoTask task)
         {
             return;
         }
@@ -16,7 +16,7 @@ namespace ToDoList.Infrastructure.Repository
         {
             return true;
         }
-        public ToDoTask Put(int id, ToDoTask task)
+        public ToDoTask Update(int id, ToDoTask task)
         {
             return task;
         }
@@ -35,7 +35,7 @@ namespace ToDoList.Infrastructure.Repository
 
         
 
-        public ToDoTask Put(ToDoTask task)
+        public ToDoTask Update(ToDoTask task)
         {
             return task;
         }
