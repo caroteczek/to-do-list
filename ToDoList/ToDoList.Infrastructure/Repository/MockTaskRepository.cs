@@ -2,14 +2,25 @@
 using System.Collections.Generic;
 using System.Text;
 using ToDoList.Domain;
+using ToDoList.Infrastructure;
+
+
+    
+
 
 namespace ToDoList.Infrastructure.Repository
 {
-    internal class MockTaskRepository: IToDoListRepository
+ public class MockTaskRepository: IToDoListRepository
     {
+
+        List<ToDoTask> _MockTasksList = new List<ToDoTask>();
+        public MockTaskRepository (List<ToDoTask> MockTasksList)
+        {
+            _MockTasksList = MockTasksList;
+        }
         public void Create(ToDoTask task)
         {
-            return;
+            _MockTasksList.Add(task);
         }
 
         public bool Delete(int identyfikator)
@@ -22,10 +33,7 @@ namespace ToDoList.Infrastructure.Repository
         }
         public List<ToDoTask> Get()
         {
-            return [
-                new ToDoTask(1, "kupic mleko"),
-            new ToDoTask(2, "wyplacic pieniadze")
-            ];
+            return _MockTasksList;
         }
 
         public ToDoTask? GetById(int identyfikator)
