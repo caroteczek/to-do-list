@@ -4,6 +4,7 @@ using ToDoList.Api.DTOs;
 using ToDoList.Domain;
 using ToDoList.Infrastructure;
 using ToDoList.Infrastructure.Repository;
+using ToDoList.Api.Controllers;
 
 namespace ToDoList.Api.Controllers
 {
@@ -15,7 +16,7 @@ namespace ToDoList.Api.Controllers
 
 
 
-        private readonly IToDoListRepository _toDoListRepository;
+        public readonly IToDoListRepository _toDoListRepository;
 
         public ToDoListController(IToDoListRepository toDoListRepository)
         {
@@ -35,6 +36,7 @@ namespace ToDoList.Api.Controllers
                 Nazwa = task.Title
             }).ToList();
 
+        
 
             return taskDtos;
         }
