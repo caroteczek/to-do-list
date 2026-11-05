@@ -1,5 +1,23 @@
 const apiUrl = "https://localhost:7232/api/ToDoList";
 
+
+
+const titleInput = document.getElementById("newTitle");
+const addButton = document.getElementById("addButton");
+
+
+if (titleInput && addButton) {
+    addButton.disabled = titleInput.value.trim() === "";
+
+
+    titleInput.addEventListener("input", function() {
+
+        addButton.disabled = titleInput.value.trim() === "";
+    });
+}
+
+
+
 // GET /api/tasks
 async function loadTasks() {
   const url = apiUrl;
@@ -107,10 +125,12 @@ async function addTask() {
 // PUT /api/tasks/{id}
 async function updateTask(id) {
   const nazwa = document.getElementById(`nazwa-${id}`).value;
+  const isCompleted = document.getElementById(`completed-${id}`).checked;
 
   const task = {
     id: id,
     nazwa: nazwa,
+	isCompleted: isCompleted,
   };
 
   const url = `${apiUrl}/${id}`;
@@ -175,14 +195,25 @@ function showTasks(tasks) {
     const div = document.createElement("div");
 
     div.className = "task";
+	
+	const isDone = task.isCompleted || false;
 
     div.innerHTML = `
             <span>ID: ${task.id}</span>
+			
+			<input 
+			type="checkbox"
+			id="completed-${task.id}"
+			${isDone ? "checked" : ""} 
+            onchange="updateTask(${task.id})"
+        >
+			
 
             <input
                 id="nazwa-${task.id}"
                 value="${task.nazwa}"
-            >
+            style="${isDone ? 'text-decoration: line-through; color: gray;' : ''}"
+        >
 
             <button onclick="updateTask(${task.id})">
                 Zapisz
@@ -287,4 +318,36 @@ document.getElementById("newTitle").addEventListener("keydown", function(event) 
     event.preventDefault(); // Zapobiega domyślnym akcjom przeglądarki
     addTask(); // Wywołuje Twoją funkcję dodającą zadanie
   }
+  
+
 });
+
+  // DELETE /api/ToDoList (usunięcie wszystkich zadań)
+async function deleteAllTasks() {
+  if (!confirm("Czy na pewno chcesz usunąć wszystkie zadania?")) {
+    return; // Anuluje, jeśli użytkownik kliknie "Anuluj" w oknie potwierdzenia
+  }
+
+  const url = apiUrl;
+
+  try {
+    logRequest("DELETE", url);
+
+    const response = await fetch(url, {
+      method: "DELETE",
+    });
+
+    const data = await readResponse(response);
+
+    logResponse(response, data);
+
+    if (!response.ok) {
+      return;
+    }
+
+    // Odśwież listę po pomyślnym usunięciu (będzie pusta)
+    loadTasks();
+  } catch (error) {
+    logError(error);
+  }
+}

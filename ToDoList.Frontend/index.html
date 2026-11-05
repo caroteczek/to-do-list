@@ -18,12 +18,13 @@
       <h2>Dodaj zadanie</h2>
 
       <input id="newTitle" placeholder="Nazwa zadania" />
-      <button onclick="addTask()">Dodaj</button>
+    <button id="addButton" onclick="addTask()" disabled>Dodaj</button>
 
       <h2>Lista zadań</h2>
 
     <button onclick="loadTasks()" class="btn-pobierz">Pobierz zadania</button>
 
+<button onclick="deleteAllTasks()">Usuń wszystkie zadania</button>
       <div id="tasks"></div>
     </section>
 
@@ -37,6 +38,8 @@
         <dt>Nazwa</dt>
         <dd id="detailsName"></dd>
       </dl>
+	  
+	  <button onclick="deleteAllTasks()">Usuń wszystkie zadania</button>
     </section>
 
     <h2>Log API</h2>

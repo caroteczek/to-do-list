@@ -32,8 +32,11 @@ namespace ToDoList.Domain
 
         public ToDoTask GetById(int id);
 
-        
-    
+        public bool DeleteAllTasks();
+
+
+
+
 
     }
 }

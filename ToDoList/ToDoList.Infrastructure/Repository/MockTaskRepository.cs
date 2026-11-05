@@ -38,7 +38,7 @@ namespace ToDoList.Infrastructure.Repository
 
         public ToDoTask? GetById(int identyfikator)
         {
-            return new ToDoTask(identyfikator, "kupic mleko");
+            return new ToDoTask(identyfikator, "kupic mleko", true);
         }
 
         
@@ -46,6 +46,11 @@ namespace ToDoList.Infrastructure.Repository
         public ToDoTask Update(ToDoTask task)
         {
             return task;
+        }
+
+        public bool DeleteAllTasks()
+        {
+            return true;
         }
     }
 }

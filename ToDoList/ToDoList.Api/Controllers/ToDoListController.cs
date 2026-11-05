@@ -16,7 +16,7 @@ namespace ToDoList.Api.Controllers
 
 
 
-        public readonly IToDoListRepository _toDoListRepository;
+       private readonly IToDoListRepository _toDoListRepository;
 
         public ToDoListController(IToDoListRepository toDoListRepository)
         {
@@ -33,7 +33,8 @@ namespace ToDoList.Api.Controllers
             List<ToDoTaskDto> taskDtos = domainTasks.Select(task => new ToDoTaskDto
             {
                 Id = task.Id,
-                Nazwa = task.Title
+                Nazwa = task.Title,
+               isCompleted = task.isCompleted
             }).ToList();
 
         
@@ -48,14 +49,19 @@ namespace ToDoList.Api.Controllers
         public IActionResult Create([FromBody] ToDoTaskDto taskDto)
         {
 
-            ToDoTask domainTask = new ToDoTask(taskDto.Id, taskDto.Nazwa);
+            ToDoTask domainTask = new ToDoTask(taskDto.Id, taskDto.Nazwa, taskDto.isCompleted);
             
-
+            if (String.IsNullOrWhiteSpace(domainTask.Title))
+            {
+                return BadRequest();
+            }
+            
             _toDoListRepository.Create(domainTask);
 
             return Created("Created", taskDto);
 
 
+           
 
 
 
@@ -67,7 +73,7 @@ namespace ToDoList.Api.Controllers
         public IActionResult Update(int id, [FromBody] ToDoTaskDto task)
         {
 
-            ToDoTask domainTask = new ToDoTask(id, task.Nazwa);
+            ToDoTask domainTask = new ToDoTask(id, task.Nazwa, task.isCompleted);
             
 
             ToDoTask updatedDomaininTask = _toDoListRepository.Update(domainTask);
@@ -80,7 +86,8 @@ namespace ToDoList.Api.Controllers
             ToDoTaskDto responseDto = new ToDoTaskDto
             {
                 Id = updatedDomaininTask.Id,
-                Nazwa = updatedDomaininTask.Title
+                Nazwa = updatedDomaininTask.Title,
+                isCompleted = updatedDomaininTask.isCompleted
             };
 
             return Ok(responseDto);
@@ -121,12 +128,29 @@ namespace ToDoList.Api.Controllers
             ToDoTaskDto taskDto = new ToDoTaskDto
             {
                 Id = domainTask.Id,
-                Nazwa = domainTask.Title
+                Nazwa = domainTask.Title,
+                isCompleted = domainTask.isCompleted
             };
 
             return Ok(taskDto);
 
     }
 
-}
-}
+        [HttpDelete]
+
+        public IActionResult DeleteAll()
+        {
+
+                bool isDeleted = _toDoListRepository.DeleteAllTasks();
+
+                if (!isDeleted)
+                {
+                    return NotFound("Brak zadań do usunięcia lub tabela była pusta.");
+                }
+
+                return NoContent(); // Status 204 - sukces, wszystko skasowane
+            }
+        }
+    }
+
+

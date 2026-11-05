@@ -43,7 +43,9 @@ namespace ToDoList.Infrastructure.Repository
                     @"
             CREATE TABLE IF NOT EXISTS tasks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nazwa TEXT not null
+                nazwa TEXT not null,
+                isCompleted BOOLEAN DEFAULT 0
+
             );
             ";
 
@@ -59,7 +61,7 @@ namespace ToDoList.Infrastructure.Repository
             SqliteCommand cmd = connection.CreateCommand();
             cmd.CommandText =
             """
-            SELECT id, nazwa
+            SELECT id, nazwa, isCompleted
             FROM tasks;
         """;
 
@@ -69,9 +71,10 @@ namespace ToDoList.Infrastructure.Repository
             {
                 int id = reader.GetInt32(0);
                 string nazwa = reader.GetString(1);
+                bool isCompleted = reader.GetInt32(reader.GetOrdinal("isCompleted")) != 0;
 
 
-                var task = new ToDoTask(id, nazwa);
+                var task = new ToDoTask(id, nazwa, isCompleted);
                 
 
                 tasks.Add(task);
@@ -112,11 +115,13 @@ namespace ToDoList.Infrastructure.Repository
             cmd.CommandText =
             """
             UPDATE tasks 
-            SET nazwa = $nazwa
+            SET nazwa = $nazwa,
+        isCompleted = $isCompleted
             WHERE id = $id;
         """;
 
             cmd.Parameters.AddWithValue("$nazwa", task.Title);
+            cmd.Parameters.AddWithValue("$isCompleted", task.isCompleted);
             cmd.Parameters.AddWithValue("$id", task.Id);
 
             int rowsAffected = cmd.ExecuteNonQuery();
@@ -149,7 +154,7 @@ namespace ToDoList.Infrastructure.Repository
             SqliteCommand cmd = connection.CreateCommand();
             cmd.CommandText =
             """
-            SELECT id, nazwa
+            SELECT id, nazwa, isCompleted
             FROM tasks
             WHERE id = $IDENTYFIKATOR;
         """;
@@ -165,8 +170,10 @@ namespace ToDoList.Infrastructure.Repository
             {
                 int Id = reader.GetInt32(0);
                 string nazwa = reader.GetString(1);
+                bool isCompleted = reader.GetInt32(reader.GetOrdinal("isCompleted")) != 0;
 
-                task = new ToDoTask(Id, nazwa);
+
+                task = new ToDoTask(Id, nazwa, isCompleted);
                                tasks.Add(task);
             }
 
@@ -174,6 +181,24 @@ namespace ToDoList.Infrastructure.Repository
 
         }
 
+
+        public bool DeleteAllTasks()
+        {
+            using var connection = new SqliteConnection(connectionString);
+            connection.Open();
+
+            // 1. Usuwamy wszystkie wiersze z tabeli
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = "DELETE FROM tasks;";
+            int rowsAffected = cmd.ExecuteNonQuery();
+
+            // 2. Resetujemy autoinkrementację ID (zaczyna od nowa od 1)
+            var resetCmd = connection.CreateCommand();
+            resetCmd.CommandText = "DELETE FROM sqlite_sequence WHERE name = 'tasks';";
+            resetCmd.ExecuteNonQuery();
+
+            return rowsAffected > 0;
+        }
 
     }
 }
