@@ -49,7 +49,7 @@ namespace ToDoList.Api.Controllers
         public IActionResult Create([FromBody] ToDoTaskDto taskDto)
         {
 
-            ToDoTask domainTask = new ToDoTask(taskDto.Id, taskDto.Nazwa, taskDto.isCompleted);
+            ToDoTask domainTask = new ToDoTask(taskDto.Id, taskDto.Nazwa, taskDto.isCompleted = false);
             
             if (String.IsNullOrWhiteSpace(domainTask.Title))
             {

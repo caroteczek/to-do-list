@@ -192,10 +192,10 @@ namespace ToDoList.Infrastructure.Repository
             cmd.CommandText = "DELETE FROM tasks;";
             int rowsAffected = cmd.ExecuteNonQuery();
 
-            // 2. Resetujemy autoinkrementację ID (zaczyna od nowa od 1)
-            var resetCmd = connection.CreateCommand();
-            resetCmd.CommandText = "DELETE FROM sqlite_sequence WHERE name = 'tasks';";
-            resetCmd.ExecuteNonQuery();
+            //// 2. Resetujemy autoinkrementację ID (zaczyna od nowa od 1)
+            //var resetCmd = connection.CreateCommand();
+            //resetCmd.CommandText = "DELETE FROM sqlite_sequence WHERE name = 'tasks';";
+            //resetCmd.ExecuteNonQuery();
 
             return rowsAffected > 0;
         }
