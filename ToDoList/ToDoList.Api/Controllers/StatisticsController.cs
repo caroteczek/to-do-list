@@ -18,23 +18,32 @@ namespace ToDoList.Api.Controllers
     public class StatisticsController : ControllerBase
     {
 
+        public readonly IToDoListRepository _IdoListRepository;
 
-        public SqliteToDoList sql = new SqliteToDoList();
+        public StatisticsController (IToDoListRepository IdoListRepository)
+        {
+
+            _IdoListRepository = IdoListRepository;
+
+        }
+
      
-        static int counter = 0;
+     
 
         [HttpGet]
         public IActionResult Get()
         {
+            int counter;
 
-            counter = sql.Get().Count;
+            counter = _IdoListRepository.Get().Count;
             
 
-        string json = $$"""{"taskCount": {{counter}}}""";
+        //string json = $$"""{"taskCount": {{counter}}}""";
 
-          
 
-                return Ok(json);
+            TaskCountDto taskCount = new TaskCountDto { taskCount = counter };
+
+                return Ok(taskCount);
             
           
     }

@@ -27,11 +27,11 @@ namespace ToDoListWebApiTests.Controllers
         {
             //Arrange
             List<ToDoTask> list_of_tasks2 = [
-                new ToDoTask (1, "Kupic maslo" ),
-                new ToDoTask(2, "Cwiczyć na rowerku" ),
-                new ToDoTask(3, "Uczyć się angielskiego" ),
-                new ToDoTask ( 4, "Być na diecie" ),
-                new ToDoTask( 5,"Przeczytać powieść" )
+                new ToDoTask (1, "Kupic maslo", true ),
+                new ToDoTask(2, "Cwiczyć na rowerku", true ),
+                new ToDoTask(3, "Uczyć się angielskiego", true ),
+                new ToDoTask ( 4, "Być na diecie", true ),
+                new ToDoTask( 5,"Przeczytać powieść", true )
 
             ];
 
@@ -66,11 +66,11 @@ namespace ToDoListWebApiTests.Controllers
         {
             //Arrange
             List<ToDoTask> list_of_tasks3 = [
-                new ToDoTask (1, "Kupic maslo" ),
-                new ToDoTask(2, "Cwiczyć na rowerku" ),
-                new ToDoTask(3, "Uczyć się angielskiego" ),
-                new ToDoTask ( 4, "Być na diecie" ),
-                new ToDoTask( 5,"Przeczytać powieść" )
+                new ToDoTask (1, "Kupic maslo", true ),
+                new ToDoTask(2, "Cwiczyć na rowerku", true ),
+                new ToDoTask(3, "Uczyć się angielskiego", true ),
+                new ToDoTask ( 4, "Być na diecie", true ),
+                new ToDoTask( 5,"Przeczytać powieść", true )
 
             ];
 
@@ -108,11 +108,11 @@ namespace ToDoListWebApiTests.Controllers
 
             //Arrange
             List<ToDoTask> list_of_tasks4 = [
-                new ToDoTask (1, "Kupic maslo" ),
-                new ToDoTask(2, "Cwiczyć na rowerku" ),
-                new ToDoTask(3, "Uczyć się angielskiego" ),
-                new ToDoTask ( 4, "Być na diecie" ),
-                new ToDoTask( 5,"Przeczytać powieść" )
+                new ToDoTask (1, "Kupic maslo" , true),
+                new ToDoTask(2, "Cwiczyć na rowerku", true ),
+                new ToDoTask(3, "Uczyć się angielskiego" , true),
+                new ToDoTask ( 4, "Być na diecie", true ),
+                new ToDoTask( 5,"Przeczytać powieść" , true )
 
             ];
 
@@ -153,11 +153,11 @@ namespace ToDoListWebApiTests.Controllers
         {
             //Arrange
             List<ToDoTask> list_of_tasks5 = [
-                new ToDoTask (1, "Kupic maslo" ),
-                new ToDoTask(2, "Cwiczyć na rowerku" ),
-                new ToDoTask(3, "Uczyć się angielskiego" ),
-                new ToDoTask ( 4, "Być na diecie" ),
-                new ToDoTask( 5,"Przeczytać powieść" )
+                new ToDoTask (1, "Kupic maslo" , true),
+                new ToDoTask(2, "Cwiczyć na rowerku" , true),
+                new ToDoTask(3, "Uczyć się angielskiego", true ),
+                new ToDoTask ( 4, "Być na diecie", true ),
+                new ToDoTask( 5,"Przeczytać powieść" , true)
 
             ];
 

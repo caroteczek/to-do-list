@@ -67,7 +67,7 @@ namespace ToDoListWebApiTests.Controllers
 
 
             // Arrange
-            ToDoTask task = new ToDoTask(30, "Umyć okna");
+            ToDoTask task = new ToDoTask(30, "Umyć okna", true);
 
             // Act
 

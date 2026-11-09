@@ -13,10 +13,13 @@ namespace ToDoList.Domain
         public int Id { get; set; }
         public string Title { get; set; }
 
-        public ToDoTask(int id, string n)
+        public bool isCompleted { get; set; }
+
+        public ToDoTask(int id, string n, bool done)
         {
             Id = id;
             Title = n;
+            isCompleted = done;
 
         }
 

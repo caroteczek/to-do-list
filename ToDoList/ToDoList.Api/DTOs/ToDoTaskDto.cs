@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Reflection.PortableExecutable;
+using System.Runtime.CompilerServices;
 using ToDoList.Api.Controllers;
 using ToDoList.Infrastructure.Repository;
 
@@ -10,9 +11,11 @@ namespace ToDoList.Api.DTOs
         public  int Id { get; set; }
         public string Nazwa { get; set; }
 
+        public bool isCompleted { get; set; }
 
- 
 
-     
+
+
+
     }
 }

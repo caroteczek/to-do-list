@@ -68,3 +68,10 @@ pre {
   padding: 10px;
   overflow-x: auto;
 }
+button:disabled {
+    background-color: #cccccc; /* Szare tło */
+    color: #666666;          /* Szary tekst */
+    opacity: 0.6;            /* Lekka przezroczystość */
+    cursor: not-allowed;     /* Kursor "zakazany" po najechaniu */
+    border: 1px solid #999999;
+}
