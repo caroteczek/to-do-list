@@ -31,6 +31,11 @@ namespace ToDoList.Infrastructure.Repository
         {
             return task;
         }
+        public List<ToDoTask> Sort(string? sortBy = null)
+        {
+            return _MockTasksList;
+        }
+
         public List<ToDoTask> Get()
         {
             return _MockTasksList;
@@ -38,7 +43,7 @@ namespace ToDoList.Infrastructure.Repository
 
         public ToDoTask? GetById(int identyfikator)
         {
-            return new ToDoTask(identyfikator, "kupic mleko", true);
+            return new ToDoTask(identyfikator, "kupic mleko", true, Priority.Medium);
         }
 
         
