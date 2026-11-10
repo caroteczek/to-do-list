@@ -20,7 +20,17 @@ if (titleInput && addButton) {
 
 // GET /api/tasks
 async function loadTasks() {
-  const url = apiUrl;
+	
+	//sortowanie
+	const sortValue = document.getElementById("sortSelect").value;
+
+	
+ let url = apiUrl;
+  
+  //warunek sprawdzający sortowanie
+  if (sortValue) {
+    url += `?sortBy=${sortValue}`;
+  }
 
   try {
     logRequest("GET", url);
@@ -45,6 +55,7 @@ async function showDetails(id) {
   document.getElementById("listView").hidden = true;
   document.getElementById("detailsView").hidden = false;
   document.getElementById("taskDetails").hidden = true;
+ // document.getElementById("detailsCompleted").textContent = task.isCompleted ? "Tak" : "Nie";
   const status = document.getElementById("detailsStatus");
   status.textContent = "Ładowanie…";
   const url = `${apiUrl}/${id}`;
@@ -67,6 +78,16 @@ async function showDetails(id) {
 
     document.getElementById("detailsId").textContent = task.id;
     document.getElementById("detailsName").textContent = task.nazwa;
+  //  document.getElementById("taskDetails").hidden = false;
+	document.getElementById("detailsCompleted").textContent = task.isCompleted ? "Tak" : "Nie";
+	
+	let priorityText = "Brak priorytetu";
+    if (task.priority === 1) priorityText = "Niski";
+    else if (task.priority === 2) priorityText = "Średni";
+    else if (task.priority === 3) priorityText = "Wysoki";
+    
+    document.getElementById("detailsPriority").textContent = priorityText;
+
     document.getElementById("taskDetails").hidden = false;
     status.textContent = "";
   } catch (error) {
@@ -85,10 +106,17 @@ function showList() {
 async function addTask() {
   const nazwa = document.getElementById("newTitle").value;
   
+// pobieramy wartość priorytety z nowego pola typu ComboBox w formularzu ToDoList
+
+const prioritySelect = document.getElementById("newPriority");
+const priorityValue = prioritySelect && prioritySelect.value !== "" ? parseInt(prioritySelect.value) : null;
+
 
 
   const task = {
     nazwa: nazwa,
+	// dodajemy pole priority do obiektu wysyłanego do api/ToDoList
+	priority: priorityValue,
   };
 
   const url = apiUrl;
@@ -113,6 +141,10 @@ async function addTask() {
     }
 
     document.getElementById("newTitle").value = "";
+	
+	//resetujemy wartość combobox priorytetu po dodaniu zadania
+	
+	if (prioritySelect) prioritySelect.value = "";
 
     loadTasks();
   } catch (error) {
@@ -127,10 +159,21 @@ async function updateTask(id) {
   const nazwa = document.getElementById(`nazwa-${id}`).value;
   const isCompleted = document.getElementById(`completed-${id}`).checked;
 
+//pobieramy aktulaną wartość priorytetu z comboboxa konkretnego zadania na liście
+const prioritySelect = document.getElementById(`priority-${id}`);
+const priorityValue = prioritySelect && prioritySelect.value !==  "" ? parseInt(prioritySelect.value) : null;
+
+ 
+
+
   const task = {
     id: id,
     nazwa: nazwa,
 	isCompleted: isCompleted,
+	
+	// dołączamy priority do obiektu aktualizającego zadanie
+	
+	priority: priorityValue,
   };
 
   const url = `${apiUrl}/${id}`;
@@ -197,7 +240,10 @@ function showTasks(tasks) {
     div.className = "task";
 	
 	const isDone = task.isCompleted || false;
-
+	
+	//Sprawdzamy priorytet zadania pobranegoo z api (jeśli null/undefinied, dodajemy pusty string) 
+	
+	const currentPriority = task.priority !== undefined && task.priority !== null ? task.priority : "";
     div.innerHTML = `
             <span>ID: ${task.id}</span>
 			
@@ -213,8 +259,19 @@ function showTasks(tasks) {
                 id="nazwa-${task.id}"
                 value="${task.nazwa}"
             style="${isDone ? 'text-decoration: line-through; color: gray;' : ''}"
+			
+			
+			
+			
         >
-
+		
+		<select id="priority-${task.id}" onchange="updateTask(${task.id})">
+    <option value="" ${currentPriority === "" ? "selected": ""}>Brak priorytetu</option> 
+    <option value="1" ${currentPriority === 1 ? "selected": ""}>Niski</option>
+    <option value="2" ${currentPriority === 2 ? "selected": ""}>Średni</option>
+    <option value="3" ${currentPriority === 3 ? "selected": ""}>Wysoki</option> 
+	</select>
+    <button onclick="updateTask(${task.id})"
             <button onclick="updateTask(${task.id})">
                 Zapisz
             </button>

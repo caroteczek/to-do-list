@@ -18,6 +18,16 @@
       <h2>Dodaj zadanie</h2>
 
       <input id="newTitle" placeholder="Nazwa zadania" />
+	  
+	  <select id="newPriority">
+    <option value="">Brak priorytetu</option>
+    <option value="1">Niski</option>
+    <option value="2">Średni</option>
+    <option value="3">Wysoki</option>
+		</select>
+		
+	
+
     <button id="addButton" onclick="addTask()" disabled>Dodaj</button>
 
       <h2>Lista zadań</h2>
@@ -25,6 +35,13 @@
     <button onclick="loadTasks()" class="btn-pobierz">Pobierz zadania</button>
 
 <button onclick="deleteAllTasks()">Usuń wszystkie zadania</button>
+
+	<select id="sortSelect" onchange="loadTasks()">
+    <option value="">Brak sortowania</option>
+    <option value="uncompleted-first">Niezrobione na górze</option>
+    <option value="completed-first">Zrobione na górze</option>
+    <option value="alphabetical">Alfabetycznie</option>
+</select>
       <div id="tasks"></div>
     </section>
 
@@ -37,14 +54,25 @@
         <dd id="detailsId"></dd>
         <dt>Nazwa</dt>
         <dd id="detailsName"></dd>
+		
+		<dt>Ukończono</dt>
+        <dd id="detailsCompleted"></dd>
+		
+		<dt>Priorytet</dt>
+        <dd id="detailsPriority"></dd>
+		
+		
       </dl>
 	  
 	  <button onclick="deleteAllTasks()">Usuń wszystkie zadania</button>
     </section>
+	
+	
 
     <h2>Log API</h2>
 
     <div id="apiLog"></div>
+
 
     <script src="script.js"></script>
   </body>

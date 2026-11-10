@@ -31,14 +31,14 @@ namespace ToDoList.Infrastructure.Repository
         {
             return task;
         }
-        public List<ToDoTask> Get()
+        public List<ToDoTask> Get(string? sortBy = null)
         {
             return _MockTasksList;
         }
 
         public ToDoTask? GetById(int identyfikator)
         {
-            return new ToDoTask(identyfikator, "kupic mleko", true);
+            return new ToDoTask(identyfikator, "kupic mleko", true, Priority.Medium);
         }
 
         

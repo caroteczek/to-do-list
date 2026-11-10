@@ -14,7 +14,7 @@ namespace ToDoList.Domain
   
     public interface IToDoListRepository
     {
-      public List<ToDoTask> Get();
+      public List<ToDoTask> Get(string? sortBy = null);
 
 
 

@@ -26,15 +26,17 @@ namespace ToDoList.Api.Controllers
 
         [HttpGet]
 
-        public List<ToDoTaskDto> Get()
+        public List<ToDoTaskDto> Get([FromQuery] string? sortBy)
         {
-            List<ToDoTask> domainTasks = _toDoListRepository.Get();
+            List<ToDoTask> domainTasks = _toDoListRepository.Get(sortBy);
 
             List<ToDoTaskDto> taskDtos = domainTasks.Select(task => new ToDoTaskDto
             {
                 Id = task.Id,
                 Nazwa = task.Title,
-               isCompleted = task.isCompleted
+               isCompleted = task.isCompleted,
+               Priority = task.Priority
+              
             }).ToList();
 
         
@@ -49,7 +51,7 @@ namespace ToDoList.Api.Controllers
         public IActionResult Create([FromBody] ToDoTaskDto taskDto)
         {
 
-            ToDoTask domainTask = new ToDoTask(taskDto.Id, taskDto.Nazwa, taskDto.isCompleted = false);
+            ToDoTask domainTask = new ToDoTask(taskDto.Id, taskDto.Nazwa, taskDto.isCompleted = false, taskDto.Priority);
             
             if (String.IsNullOrWhiteSpace(domainTask.Title))
             {
@@ -73,7 +75,7 @@ namespace ToDoList.Api.Controllers
         public IActionResult Update(int id, [FromBody] ToDoTaskDto task)
         {
 
-            ToDoTask domainTask = new ToDoTask(id, task.Nazwa, task.isCompleted);
+            ToDoTask domainTask = new ToDoTask(id, task.Nazwa, task.isCompleted, task.Priority);
             
 
             ToDoTask updatedDomaininTask = _toDoListRepository.Update(domainTask);
@@ -87,7 +89,8 @@ namespace ToDoList.Api.Controllers
             {
                 Id = updatedDomaininTask.Id,
                 Nazwa = updatedDomaininTask.Title,
-                isCompleted = updatedDomaininTask.isCompleted
+                isCompleted = updatedDomaininTask.isCompleted,
+                Priority = updatedDomaininTask.Priority
             };
 
             return Ok(responseDto);
@@ -129,7 +132,8 @@ namespace ToDoList.Api.Controllers
             {
                 Id = domainTask.Id,
                 Nazwa = domainTask.Title,
-                isCompleted = domainTask.isCompleted
+                isCompleted = domainTask.isCompleted,
+                Priority = domainTask.Priority
             };
 
             return Ok(taskDto);

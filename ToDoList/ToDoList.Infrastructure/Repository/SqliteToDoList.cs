@@ -44,7 +44,8 @@ namespace ToDoList.Infrastructure.Repository
             CREATE TABLE IF NOT EXISTS tasks (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 nazwa TEXT not null,
-                isCompleted BOOLEAN DEFAULT 0
+                isCompleted BOOLEAN DEFAULT 0,
+                priority INTEGER NULL
 
             );
             ";
@@ -52,18 +53,45 @@ namespace ToDoList.Infrastructure.Repository
             createTableCommand.ExecuteNonQuery();
         }
 
-        public List<ToDoTask> Get()
+        public List<ToDoTask> Get(string? sortBy = null)
         {
-        
+            System.Diagnostics.Debug.WriteLine($"Otrzymano sortBy: '{sortBy}'");
+
             using SqliteConnection connection = new SqliteConnection(connectionString);
             connection.Open();
 
             SqliteCommand cmd = connection.CreateCommand();
-            cmd.CommandText =
+            string query =
             """
-            SELECT id, nazwa, isCompleted
-            FROM tasks;
+            SELECT id, nazwa, isCompleted, priority
+            FROM tasks
         """;
+
+            //sortowanie - wybór
+
+            if (sortBy == "alphabetical")
+            {
+                query += " ORDER BY nazwa ASC;"; //alfabytycznie od A do Z
+            }
+            else if (sortBy == "completed-first")
+            {
+                query += " ORDER BY isCompleted DESC;";
+
+            }
+            else if (sortBy == "completed-first")
+            {
+                query += " ORDER BY isCompleted ASC;";
+
+            }
+            else
+            {
+                query += ";"; //domyślnie, bez sortowania
+            }
+
+            System.Diagnostics.Debug.WriteLine($"Wykonuję SQL: {query}");
+
+            cmd.CommandText = query;
+
 
             using SqliteDataReader reader = cmd.ExecuteReader();
             List<ToDoTask> tasks = new List<ToDoTask>();
@@ -72,10 +100,11 @@ namespace ToDoList.Infrastructure.Repository
                 int id = reader.GetInt32(0);
                 string nazwa = reader.GetString(1);
                 bool isCompleted = reader.GetInt32(reader.GetOrdinal("isCompleted")) != 0;
+                Priority? priority = reader.IsDBNull(3) ? (Priority?)null : (Priority)reader.GetInt32(3);
 
 
-                var task = new ToDoTask(id, nazwa, isCompleted);
-                
+                var task = new ToDoTask(id, nazwa, isCompleted, priority.HasValue ? (Priority?)priority.Value : null);
+
 
                 tasks.Add(task);
             }
@@ -98,10 +127,11 @@ namespace ToDoList.Infrastructure.Repository
             var insertCommand = connection.CreateCommand();
 
             insertCommand.CommandText =
-            "INSERT INTO tasks (nazwa) VALUES ($nazwa); ";
+            "INSERT INTO tasks (nazwa, priority) VALUES ($nazwa, $priority); ";
 
             insertCommand.Parameters.AddWithValue("$nazwa", task.Title);
-            
+            insertCommand.Parameters.AddWithValue("$priority", task.Priority.HasValue ? (object)task.Priority.Value : DBNull.Value);
+
             insertCommand.ExecuteNonQuery();
         }
 
@@ -116,13 +146,15 @@ namespace ToDoList.Infrastructure.Repository
             """
             UPDATE tasks 
             SET nazwa = $nazwa,
-        isCompleted = $isCompleted
+        isCompleted = $isCompleted,
+        priority = $priority
             WHERE id = $id;
         """;
 
             cmd.Parameters.AddWithValue("$nazwa", task.Title);
             cmd.Parameters.AddWithValue("$isCompleted", task.isCompleted);
             cmd.Parameters.AddWithValue("$id", task.Id);
+            cmd.Parameters.AddWithValue("$priority", task.Priority.HasValue ? (object)task.Priority.Value : DBNull.Value);
 
             int rowsAffected = cmd.ExecuteNonQuery();
             return task;
@@ -154,7 +186,7 @@ namespace ToDoList.Infrastructure.Repository
             SqliteCommand cmd = connection.CreateCommand();
             cmd.CommandText =
             """
-            SELECT id, nazwa, isCompleted
+            SELECT id, nazwa, isCompleted, priority
             FROM tasks
             WHERE id = $IDENTYFIKATOR;
         """;
@@ -171,11 +203,14 @@ namespace ToDoList.Infrastructure.Repository
                 int Id = reader.GetInt32(0);
                 string nazwa = reader.GetString(1);
                 bool isCompleted = reader.GetInt32(reader.GetOrdinal("isCompleted")) != 0;
-
-
-                task = new ToDoTask(Id, nazwa, isCompleted);
+                // int priority = reader.GetInt32(3);
+                Priority? priority = reader.IsDBNull(3) ? (Priority?)null : (Priority)reader.GetInt32(3);
+                task = new ToDoTask(Id, nazwa, isCompleted, Priority.Low);
                                tasks.Add(task);
+
+                task = new ToDoTask(Id, nazwa, isCompleted, priority);
             }
+        
 
                       return task;
 
