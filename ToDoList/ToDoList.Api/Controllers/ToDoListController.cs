@@ -28,7 +28,24 @@ namespace ToDoList.Api.Controllers
 
         public List<ToDoTaskDto> Get([FromQuery] string? sortBy)
         {
-            List<ToDoTask> domainTasks = _toDoListRepository.Get(sortBy);
+            List<ToDoTask> domainTasks = _toDoListRepository.Get();
+
+        
+
+            if (sortBy == "alphabetical")
+            {
+                domainTasks = domainTasks.OrderBy(n => n.Title).ToList();
+            }
+
+            if (sortBy == "completed-first")
+            {
+                domainTasks = domainTasks.OrderByDescending(n => n.isCompleted).ToList();
+            }
+
+            if (sortBy == "uncompleted-first")
+            {
+                domainTasks = domainTasks.OrderBy(n => n.isCompleted).ToList();
+            }
 
             List<ToDoTaskDto> taskDtos = domainTasks.Select(task => new ToDoTaskDto
             {

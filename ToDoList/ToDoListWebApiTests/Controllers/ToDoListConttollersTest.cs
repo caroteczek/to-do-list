@@ -99,7 +99,7 @@ namespace ToDoListWebApiTests.Controllers
             var deletedId = sut.Delete(id_to_remove);
 
             // Assert
-            //var findid = sut.Get().Where(p => p.Id == id_to_remove).ToList();
+            //var findid = sut.Sort().Where(p => p.Id == id_to_remove).ToList();
         }
 
         [Fact]
@@ -141,7 +141,7 @@ namespace ToDoListWebApiTests.Controllers
             var deletedId = sut.Delete(id_to_remove);
 
             // Assert
-            //var findIncorrectId = sut.Get().Where(p => p.Id == id_to_remove).ToList();
+            //var findIncorrectId = sut.Sort().Where(p => p.Id == id_to_remove).ToList();
            // Assert.Empty(findIncorrectId);
            // Assert.Equal(0, findIncorrectId.Count);
 
@@ -193,7 +193,7 @@ namespace ToDoListWebApiTests.Controllers
 
             Assert.IsType<OkObjectResult>(result);
 
-           // List<ToDoTaskDto> allTasks = sut.Get();
+           // List<ToDoTaskDto> allTasks = sut.Sort();
             //List<ToDoTaskDto> findTask = allTasks.Where(p => p.Id == id).ToList();
    
             //Assert.Equal(list_of_tasks5.Count, allTasks.Count);

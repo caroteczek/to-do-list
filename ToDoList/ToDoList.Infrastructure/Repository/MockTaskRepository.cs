@@ -31,7 +31,12 @@ namespace ToDoList.Infrastructure.Repository
         {
             return task;
         }
-        public List<ToDoTask> Get(string? sortBy = null)
+        public List<ToDoTask> Sort(string? sortBy = null)
+        {
+            return _MockTasksList;
+        }
+
+        public List<ToDoTask> Get()
         {
             return _MockTasksList;
         }

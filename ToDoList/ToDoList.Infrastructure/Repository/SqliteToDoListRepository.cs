@@ -15,19 +15,19 @@ namespace ToDoList.Infrastructure.Repository
 {
 
 
-    public class SqliteToDoList: IToDoListRepository
+    public class SqliteToDoListRepository: IToDoListRepository
     {
 
         private readonly string connectionString;
 
 
-        public SqliteToDoList(string connectionString)
+        public SqliteToDoListRepository(string connectionString)
         {
             this.connectionString = connectionString;
         }
 
 
-        public SqliteToDoList() : this("Data Source=BazaDanych.db")
+        public SqliteToDoListRepository() : this("Data Source=BazaDanych.db")
         {
         }
 
@@ -53,7 +53,7 @@ namespace ToDoList.Infrastructure.Repository
             createTableCommand.ExecuteNonQuery();
         }
 
-        public List<ToDoTask> Get(string? sortBy = null)
+        public List<ToDoTask> Sort(string? sortBy = null)
         {
             System.Diagnostics.Debug.WriteLine($"Otrzymano sortBy: '{sortBy}'");
 
@@ -78,7 +78,7 @@ namespace ToDoList.Infrastructure.Repository
                 query += " ORDER BY isCompleted DESC;";
 
             }
-            else if (sortBy == "completed-first")
+            else if (sortBy == "uncompleted-first")
             {
                 query += " ORDER BY isCompleted ASC;";
 
@@ -113,7 +113,42 @@ namespace ToDoList.Infrastructure.Repository
         }
 
 
+        public List<ToDoTask> Get()
+        {
+           
+            using SqliteConnection connection = new SqliteConnection(connectionString);
+            connection.Open();
 
+            SqliteCommand cmd = connection.CreateCommand();
+            string query =
+            """
+            SELECT id, nazwa, isCompleted, priority
+            FROM tasks;
+        """;
+
+    
+
+            cmd.CommandText = query;
+
+
+            using SqliteDataReader reader = cmd.ExecuteReader();
+            List<ToDoTask> tasks = new List<ToDoTask>();
+            while (reader.Read())
+            {
+                int id = reader.GetInt32(0);
+                string nazwa = reader.GetString(1);
+                bool isCompleted = reader.GetInt32(reader.GetOrdinal("isCompleted")) != 0;
+                Priority? priority = reader.IsDBNull(3) ? (Priority?)null : (Priority)reader.GetInt32(3);
+
+
+                var task = new ToDoTask(id, nazwa, isCompleted, priority.HasValue ? (Priority?)priority.Value : null);
+
+
+                tasks.Add(task);
+            }
+
+            return tasks;
+        }
 
 
 
@@ -178,7 +213,7 @@ namespace ToDoList.Infrastructure.Repository
         }
 
 
-        public ToDoTask GetById(int id)
+        public ToDoTask? GetById(int id)
         {
             using SqliteConnection connection = new SqliteConnection(connectionString);
             connection.Open();
@@ -194,7 +229,7 @@ namespace ToDoList.Infrastructure.Repository
             cmd.Parameters.AddWithValue("$IDENTYFIKATOR", id);
 
             using SqliteDataReader reader = cmd.ExecuteReader();
-            List<ToDoTask> tasks = new List<ToDoTask>();
+           
             ToDoTask? task = null;
 
             
@@ -205,8 +240,7 @@ namespace ToDoList.Infrastructure.Repository
                 bool isCompleted = reader.GetInt32(reader.GetOrdinal("isCompleted")) != 0;
                 // int priority = reader.GetInt32(3);
                 Priority? priority = reader.IsDBNull(3) ? (Priority?)null : (Priority)reader.GetInt32(3);
-                task = new ToDoTask(Id, nazwa, isCompleted, Priority.Low);
-                               tasks.Add(task);
+                
 
                 task = new ToDoTask(Id, nazwa, isCompleted, priority);
             }

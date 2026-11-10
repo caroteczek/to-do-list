@@ -14,10 +14,9 @@ namespace ToDoList.Domain
   
     public interface IToDoListRepository
     {
-      public List<ToDoTask> Get(string? sortBy = null);
+      public List<ToDoTask> Sort(string? sortBy = null);
 
-
-
+        public List<ToDoTask> Get();
 
 
 
@@ -30,7 +29,7 @@ namespace ToDoList.Domain
         public bool Delete(int id);
 
 
-        public ToDoTask GetById(int id);
+        public ToDoTask? GetById(int id);
 
         public bool DeleteAllTasks();
 
