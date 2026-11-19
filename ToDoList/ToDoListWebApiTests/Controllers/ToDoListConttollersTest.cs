@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Transactions;
 using Microsoft.AspNetCore.Mvc;
+using ToDoList.Api.Controllers;
+using ToDoList.Api.DTOs;
 using ToDoList.Domain;
 using ToDoList.Infrastructure.Repository;
-using ToDoList.Api.DTOs;
-using ToDoList.Api.Controllers;
 using Xunit;
-using System.Security.Cryptography.X509Certificates;
-using System.Transactions;
 
 
 namespace ToDoListWebApiTests.Controllers
@@ -36,26 +37,33 @@ namespace ToDoListWebApiTests.Controllers
             ];
 
 
-
+            //Act
 
             MockTaskRepository mockRepo = new MockTaskRepository(list_of_tasks2);
 
             ToDoListController sut = new ToDoListController(mockRepo);
 
-            foreach (ToDoTask toDo in list_of_tasks2.ToList())
+          List <ToDoTaskDto> list_of_tasks = sut.Get("alphabetical");
+        
+
+            List<ToDoTaskDto> expected = list_of_tasks2
+        .OrderBy(n => n.Title) 
+        .Select(n => new ToDoTaskDto { Id = n.Id, Nazwa = n.Title, isCompleted = n.isCompleted, Priority = n.Priority }).ToList();
+
+
+            //Assert
+
+            //Assert.Equal(expected, list_of_tasks);
+
+            Assert.Equal(expected.Count, list_of_tasks.Count);
+
+            for (int i = 0; i < expected.Count; i++)
             {
-
-
-                ToDoTaskDto testTask = new ToDoTaskDto
-                {
-                    Id = toDo.Id,
-                    Nazwa = toDo.Title
-                };
-
-
+                Assert.Equal(expected[i].Id, list_of_tasks[i].Id);
+                Assert.Equal(expected[i].Nazwa, list_of_tasks[i].Nazwa);
+                Assert.Equal(expected[i].isCompleted, list_of_tasks[i].isCompleted);
+                Assert.Equal(expected[i].Priority, list_of_tasks[i].Priority);
             }
-
-
 
 
         }
@@ -79,30 +87,17 @@ namespace ToDoListWebApiTests.Controllers
             ToDoListController sut = new ToDoListController(mockRepo);
 
 
-            foreach (ToDoTask toDo in list_of_tasks3.ToList())
-            {
 
-
-                ToDoTaskDto testTask = new ToDoTaskDto
-                {
-                    Id = toDo.Id,
-                    Nazwa = toDo.Title
-                };
-
-
-                sut.Create(testTask);
-
-            }
 
             // Act
             int id_to_remove = 2;
-            var deletedId = sut.Delete(id_to_remove);
+            IActionResult deletedId = sut.Delete(id_to_remove);
 
-            // Assert
-            //var findid = sut.Sort().Where(p => p.Id == id_to_remove).ToList();
+
+            Assert.IsType<NoContentResult>(deletedId);
         }
 
-        [Fact]
+            [Fact]
         public void Remove_One_Not_Existing_Task()
         {
 
@@ -121,29 +116,15 @@ namespace ToDoListWebApiTests.Controllers
             ToDoListController sut = new ToDoListController(mockRepo);
 
 
-            foreach (ToDoTask toDo in list_of_tasks4.ToList())
-            {
-
-
-                ToDoTaskDto testTask = new ToDoTaskDto
-                {
-                    Id = toDo.Id,
-                    Nazwa = toDo.Title
-                };
-
-
-                sut.Create(testTask);
-
-            }
-
             // Act
             int id_to_remove = 10;
-            var deletedId = sut.Delete(id_to_remove);
+            IActionResult deletedId = sut.Delete(id_to_remove);
 
-            // Assert
-            //var findIncorrectId = sut.Sort().Where(p => p.Id == id_to_remove).ToList();
-           // Assert.Empty(findIncorrectId);
-           // Assert.Equal(0, findIncorrectId.Count);
+
+            //Assert
+
+            Assert.IsType<NotFoundResult>(deletedId);
+
 
         }
 
@@ -165,39 +146,15 @@ namespace ToDoListWebApiTests.Controllers
 
             ToDoListController sut = new ToDoListController(mockRepo);
 
-            foreach (ToDoTask toDo in list_of_tasks5.ToList())
-            {
-
-
-                ToDoTaskDto testTask = new ToDoTaskDto
-                {
-                    Id = toDo.Id,
-                    Nazwa = toDo.Title
-                };
-
-
-                sut.Create(testTask);
-
-               
-
-            }
             //Act
-
-            int id = 2;
-
-            ToDoTaskDto taskToUpdate = new ToDoTaskDto { Id = id, Nazwa = "Cwiczyć na orbiterku" };
-
-            var result = sut.Update(2, taskToUpdate);
+            
+            ToDoTaskDto updatedDto = new ToDoTaskDto { Nazwa = "Zapłacić rachunki", isCompleted = true, Priority = Priority.Low };
+            IActionResult result = sut.Update(list_of_tasks5[3].Id, updatedDto);
 
             //Assert
 
             Assert.IsType<OkObjectResult>(result);
 
-           // List<ToDoTaskDto> allTasks = sut.Sort();
-            //List<ToDoTaskDto> findTask = allTasks.Where(p => p.Id == id).ToList();
-   
-            //Assert.Equal(list_of_tasks5.Count, allTasks.Count);
-            //Assert.Equal(2, findTask.Count);
         }
         }
 }

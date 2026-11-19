@@ -245,7 +245,7 @@ function showTasks(tasks) {
 	
 	const currentPriority = task.priority !== undefined && task.priority !== null ? task.priority : "";
     div.innerHTML = `
-            <span>ID: ${task.id}</span>
+           
 			
 			<input 
 			type="checkbox"
