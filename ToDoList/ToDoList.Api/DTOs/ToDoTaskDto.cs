@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using ToDoList.Api.Controllers;
 using ToDoList.Infrastructure.Repository;
+using ToDoList.Domain;
 
 namespace ToDoList.Api.DTOs
 {
@@ -12,6 +13,8 @@ namespace ToDoList.Api.DTOs
         public string Nazwa { get; set; }
 
         public bool isCompleted { get; set; }
+
+        public Priority? Priority { get; set; }
 
 
 

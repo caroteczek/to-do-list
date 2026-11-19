@@ -32,7 +32,7 @@ namespace ToDoListWebApiTests.Controllers
             string dbName = $"{Guid.NewGuid()}_BazaDanych";
             string connectionString = $"Data Source={dbName}";
 
-            SqliteToDoList repository = new SqliteToDoList(connectionString);
+            SqliteToDoListRepository repository = new SqliteToDoListRepository(connectionString);
             repository.Ensure();
 
             return (repository, dbName);
@@ -67,7 +67,7 @@ namespace ToDoListWebApiTests.Controllers
 
 
             // Arrange
-            ToDoTask task = new ToDoTask(30, "Umyć okna", true);
+            ToDoTask task = new ToDoTask(30, "Umyć okna", true, Priority.High);
 
             // Act
 

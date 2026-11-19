@@ -35,7 +35,7 @@ namespace ToDoList.Api.Controllers
         {
             int counter;
 
-            counter = _IdoListRepository.Get().Count;
+            counter = _IdoListRepository.Sort().Count;
             
 
         //string json = $$"""{"taskCount": {{counter}}}""";

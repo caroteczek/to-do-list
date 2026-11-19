@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using ToDoList.Domain;
 using ToDoList.Infrastructure;
+using static Microsoft.Data.SqlClient.Internal.SqlClientEventSource;
+
 
 
     
@@ -26,12 +28,24 @@ namespace ToDoList.Infrastructure.Repository
 
         public bool Delete(int identyfikator)
         {
+            var taskToRemove = _MockTasksList.FirstOrDefault(t => t.Id == identyfikator);
+            if (taskToRemove is null)
+            {
+                return false;
+            }
+
+          _MockTasksList.Remove(taskToRemove);
             return true;
         }
         public ToDoTask Update(int id, ToDoTask task)
         {
             return task;
         }
+        public List<ToDoTask> Sort(string? sortBy = null)
+        {
+            return _MockTasksList;
+        }
+
         public List<ToDoTask> Get()
         {
             return _MockTasksList;
@@ -39,7 +53,7 @@ namespace ToDoList.Infrastructure.Repository
 
         public ToDoTask? GetById(int identyfikator)
         {
-            return new ToDoTask(identyfikator, "kupic mleko", true);
+            return new ToDoTask(identyfikator, "kupic mleko", true, Priority.Medium);
         }
 
         

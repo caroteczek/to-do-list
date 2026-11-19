@@ -15,12 +15,14 @@ namespace ToDoList.Domain
 
         public bool isCompleted { get; set; }
 
-        public ToDoTask(int id, string n, bool done)
+        public Priority? Priority { get; set; }
+
+        public ToDoTask(int id, string n, bool done, Priority ? p)
         {
             Id = id;
             Title = n;
             isCompleted = done;
-
+            Priority = p;
         }
 
     }
