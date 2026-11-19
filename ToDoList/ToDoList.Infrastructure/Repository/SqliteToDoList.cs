@@ -88,7 +88,9 @@ namespace ToDoList.Infrastructure.Repository
 
 
 
-        public void Create(ToDoTask task)
+
+
+        public bool Create(ToDoTask task)
         {
             Ensure();
          
@@ -103,6 +105,8 @@ namespace ToDoList.Infrastructure.Repository
             insertCommand.Parameters.AddWithValue("$nazwa", task.Title);
             
             insertCommand.ExecuteNonQuery();
+
+            return true;
         }
 
 

@@ -15,7 +15,7 @@ namespace ToDoListWebApiTests.Controllers
 {
     public class ToDoListSqliteTest: IDisposable
     {
-        private IToDoListRepository ServiceSQLiteTest { get;  }
+        private IToDoListRepository sut { get;  }
 
         private string DbName { get; }
 
@@ -23,7 +23,7 @@ namespace ToDoListWebApiTests.Controllers
         {
             (IToDoListRepository serviceSQLiteTest, string dbname) = NewRepository();
 
-            ServiceSQLiteTest = serviceSQLiteTest;
+            sut = serviceSQLiteTest;
             DbName = dbname;
         }
 
@@ -71,15 +71,16 @@ namespace ToDoListWebApiTests.Controllers
 
             // Act
 
-            ServiceSQLiteTest.Create(task);
+            bool result = sut.Create(task);
 
+            List<ToDoTask> tasks = sut.Get();
+
+            
             // Assert
-            List<ToDoTask> tasks = ServiceSQLiteTest.Get();
-            Assert.Single(tasks);
-
-            ToDoTask one_of_task = tasks.First();
-            Assert.Equal("Umyć okna", one_of_task.Title );
-        
+            Assert.True(result);
+            ToDoTask ?actual = tasks.FirstOrDefault(n => n.Title == task.Title && n.isCompleted == task.isCompleted && n.Priority == task.Priority);
+            Assert.NotNull(actual);
+          
 
 
         }

@@ -21,7 +21,7 @@ namespace ToDoList.Domain
 
 
 
-        public void Create(ToDoTask task);
+        public bool Create(ToDoTask task);
 
 
         public ToDoTask Update(ToDoTask task);

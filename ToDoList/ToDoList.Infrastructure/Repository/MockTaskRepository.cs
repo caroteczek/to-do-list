@@ -18,9 +18,10 @@ namespace ToDoList.Infrastructure.Repository
         {
             _MockTasksList = MockTasksList;
         }
-        public void Create(ToDoTask task)
+        public bool Create(ToDoTask task)
         {
             _MockTasksList.Add(task);
+            return true;
         }
 
         public bool Delete(int identyfikator)
