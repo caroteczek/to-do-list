@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
 using ToDoList.Domain;
 
 namespace ToDoList.Infrastructure.Repository
@@ -83,11 +84,9 @@ namespace ToDoList.Infrastructure.Repository
                 int isCompletedOrdinal = reader.GetOrdinal("isCompleted");
                 bool isCompleted = !reader.IsDBNull(isCompletedOrdinal) && reader.GetBoolean(isCompletedOrdinal);
 
-                string priorityRaw = reader.IsDBNull(3) ? string.Empty : reader.GetString(3);
-                Priority? priority = Enum.TryParse<Priority>(priorityRaw, ignoreCase: true, out var parsedPriority)
-                    ? parsedPriority
-                    : null;
-                var task = new ToDoTask(id, nazwa, isCompleted, priority.HasValue ? (Priority?)priority.Value : null);
+                int? priorityRaw = reader.IsDBNull(3) ? null : reader.GetInt32(3);
+                Priority? priority = (Priority?)priorityRaw; 
+                var task = new ToDoTask(id, nazwa, isCompleted, priority);
 
 
                 tasks.Add(task);
@@ -127,10 +126,9 @@ namespace ToDoList.Infrastructure.Repository
                 string nazwa = reader.GetString(nazwaOrdinal);
                 bool isCompleted = !reader.IsDBNull(isCompletedOrdinal) && reader.GetBoolean(isCompletedOrdinal);
 
-                string priorityText = reader.IsDBNull(priorityOrdinal) ? string.Empty : reader.GetString(priorityOrdinal);
-                Priority? priority = Enum.TryParse<Priority>(priorityText, ignoreCase: true, out var parsedPriority)
-                    ? parsedPriority
-                    : null;
+                int? priorityRaw = reader.IsDBNull(3) ? null : reader.GetInt32(3);
+                Priority? priority = (Priority?)priorityRaw;
+             
 
                 task = new ToDoTask(Id, nazwa, isCompleted, priority);
             }
@@ -183,11 +181,14 @@ namespace ToDoList.Infrastructure.Repository
             {
                 int id = reader.GetInt32(0);
                 string nazwa = reader.GetString(1);
-                bool isCompleted = reader.GetInt32(reader.GetOrdinal("isCompleted")) != 0;
-                Priority? priority = reader.IsDBNull(3) ? (Priority?)null : (Priority)reader.GetInt32(3);
+                bool isCompleted = reader.GetBoolean(2);
+                int? priorityRaw = reader.IsDBNull(3) ? null : reader.GetInt32(3);
+                Priority? priority = (Priority?)priorityRaw;
 
+             
+              //  string? p = priority is null ? null : priority.Value.ToString();
 
-                var task = new ToDoTask(id, nazwa, isCompleted, priority.HasValue ? (Priority?)priority.Value : null);
+                var task = new ToDoTask(id, nazwa, isCompleted, priority);
 
 
                 tasks.Add(task);
