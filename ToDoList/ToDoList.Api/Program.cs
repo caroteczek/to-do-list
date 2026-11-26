@@ -7,8 +7,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddScoped<IToDoListRepository, SqliteToDoListRepository>();
+
+
+string? connection_string = builder.Configuration.GetSection("ConnectionStrings").GetValue<string>("ToDoListDb");
+if (connection_string is null)
+{
+    throw new InvalidOperationException("Connection string 'ToDoListDb' not found");
+}
+builder.Services.AddScoped<IToDoListRepository, MsSqlToDoListRepository>(x =>
+{
+    MsSqlToDoListRepository repository = new MsSqlToDoListRepository(connection_string);
+    return repository;
+    });
 
 builder.Services.AddCors(options =>
 {
